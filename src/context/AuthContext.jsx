@@ -16,14 +16,23 @@ export function AuthProvider({ children }) {
     };
 
     // Todo: updateuser and Logout
+    const logout = () => {
+        setUser(null);
+        localStorage.removeItem('user');
+      };
 
-    return  (
-        <AuthContext.Provider  value={{ user, login }}>
-            {children}
+      const updateUser = (userData) => {
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+      };
+    
+      return (
+        <AuthContext.Provider value={{ user, login, logout, updateUser }}>
+          {children}
         </AuthContext.Provider>
-    );
-}
-
-export function useAuth() {
-    return useContext(AuthContext);
-}
+      );
+    }
+    
+    export function useAuth() {
+      return useContext(AuthContext);
+    }

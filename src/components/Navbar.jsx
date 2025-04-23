@@ -8,9 +8,14 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    console.log('Logout clicked');
     logout();
     navigate('/');
   };
+
+    // Function to conditionally apply classes for active/inactive links (to fix `activeClassName` error)
+    const navLinkClass = ({ isActive }) =>
+        isActive ? 'hover:underline underline' : 'hover:underline';
 
   return (
     <nav className="bg-primary text-white p-4 shadow-md">
@@ -20,19 +25,19 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
           {user ? (
             <>
             {/* Pass the Nav Links */}
-              <NavLink to="/home" className="hover:underline" activeClassName="underline">
+              <NavLink to="/home" className={navLinkClass}>
                 Home
               </NavLink>
-              <NavLink to="/create" className="hover:underline" activeClassName="underline">
+              <NavLink to="/create" className={navLinkClass}>
                 Create
               </NavLink>
-              <NavLink to="/quiz" className="hover:underline" activeClassName="underline">
+              <NavLink to="/quiz" className={navLinkClass}>
                 Quiz
               </NavLink>
-              <NavLink to="/progress" className="hover:underline" activeClassName="underline">
+              <NavLink to="/progress" className={navLinkClass}>
                 Progress
               </NavLink>
-              <NavLink to="/profile" className="hover:underline" activeClassName="underline">
+              <NavLink to="/profile" className={navLinkClass}>
                 Profile
               </NavLink>
               <button
@@ -45,10 +50,11 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
             </>
           ) : (
             <>
-              <NavLink to="/signin" className="hover:underline" activeClassName="underline">
+            {/* // Sign-in/signup links */}
+              <NavLink to="/signin" className={navLinkClass}>
                 Sign In
               </NavLink>
-              <NavLink to="/signup" className="hover:underline" activeClassName="underline">
+              <NavLink to="/signup" className={navLinkClass}>
                 Sign Up
               </NavLink>
             </>
