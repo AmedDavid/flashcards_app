@@ -7,28 +7,49 @@ const api = axios.create({
     timeout: 5000,
 })
 
-//cache
+//TODO: cache for offline mode
+const cache = {
+    flashcards: JSON.parse(localStorage.getItem('flashcards')) || [],
+    categories: JSON.parse(localStorage.getItem('categories')) || [],
+    progress: JSON.parse(localStorage.getItem('progress')) || [],
+    badges: JSON.parse(localStorage.getItem('badges')) || [],
+    users: JSON.parse(localStorage.getItem('users')) || [],
+  };
 
+// Save to cache
+const updateCache = (key, data) => {
+    cache[key] = data;
+    localStorage.setItem(key, JSON.stringify(data));
+  };
+  
 
-//offline mode
+// Check if offline by pinging the /users endpoint
 const isOffline = async () => {
     try {
-        await axios.get('http://localhost:3001/ping');
-        return false;
+      await axios.get('http://localhost:3001/users');
+      return false;
     } catch {
-        return true;
+      return true;
     }
-}
+  };
 
-//users api create and get users
+// Flashcards (get, create, update and delete)
+
+//categories
+
+//progress
+
+//Badges
+
+//users api create, update and get users
 export const getUsers = async () => {
     if (await isOffline()) return cache.users;
-    const response = await api.get('/users')
+    const response = await api.get('/users');
     updateCache('users', response.data);
     return response.data;
-};
+  };  
 
-const createUser = async (user) => {
+export const createUser = async (user) => {
     if (await isOffline()) {
         const newUser = { ...user, id: Date.now() };
 
@@ -42,4 +63,15 @@ const createUser = async (user) => {
     const response = await api.post('/users', user);
     updateCache('users', [...cache.users, response.data]);
     return response.data;
-}
+};
+
+export const updateUser = async (id, user) => {
+    if (await isOffline()) {
+      cache.users = cache.users.map((u) => (u.id === id ? { ...u, ...user } : u));
+      updateCache('users', cache.users);
+      return user;
+    }
+    const response = await api.patch(`/users/${id}`, user);
+    updateCache('users', cache.users.map((u) => (u.id === id ? response.data : u)));
+    return response.data;
+  };
