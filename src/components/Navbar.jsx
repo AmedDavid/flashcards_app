@@ -59,13 +59,13 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
               </NavLink>
             </>
           )}
-          <button
+        <button
             onClick={toggleDarkMode}
             className="p-2 rounded-full hover:bg-indigo-700"
             aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-          >
+            >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+            </button>
         </div>
       </div>
     </nav>

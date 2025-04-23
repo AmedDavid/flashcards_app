@@ -21,16 +21,25 @@ function ProtectedRoute({ children }) {
 // Main app component with dark mode and authentication (in progress)
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    return localStorage.getItem('darkMode') === 'true';
+    const saved = localStorage.getItem('darkMode');
+    return saved ? saved === 'true' : false;
   });
-
+  
   useEffect(() => {
+    // console.log('Applying dark mode:', isDarkMode);
     localStorage.setItem('darkMode', isDarkMode);
-    document.documentElement.classList.toggle('dark', isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, [isDarkMode]);
-
+  
   const toggleDarkMode = () => {
-    setIsDarkMode((prev) => !prev);
+    setIsDarkMode((prev) => {
+      console.log('Toggling dark mode, new state:', !prev);
+      return !prev;
+    });
   };
 
   return (
