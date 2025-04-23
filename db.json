@@ -2,8 +2,8 @@
     "users": [
       {
         "id": 1,
-        "name": "John Doe",
-        "email": "john@example.com",
+        "name": "Test User",
+        "email": "test@mail.com",
         "password": "password123" 
       }
     ],

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, userAuth } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 // import Landing from './pages/Landing';
 import Home from './pages/Home';
@@ -14,7 +14,7 @@ import Home from './pages/Home';
 
 //since we have Auth we can protect our routs
 function ProtectedRoute({ children }) {
-  const { user } = userAuth();
+  const { user } = useAuth();
   return user ? children : <Navigate to="/signin" />;
 }
 
@@ -33,6 +33,7 @@ const toggleDarkMode = () => {
   setIsDarkMode((prev) => !prev);
 };
   return (
+    <AuthProvider>
       <div className='min-h-screen bg-gray-100 dark:bg-gray-800 transition-colors'>
         <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         <main className='container mx-auto p-4'>
@@ -45,6 +46,7 @@ const toggleDarkMode = () => {
           </Routes>
         </main>
     </div>
+    </AuthProvider>
   )
 };
 
