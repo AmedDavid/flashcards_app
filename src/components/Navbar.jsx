@@ -8,9 +8,9 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log('Logout clicked');
+    // console.log('Logout clicked');
     logout();
-    navigate('/');
+    navigate('/'); //we redirect to the landing page after user logsout
   };
 
     // Function to conditionally apply classes for active/inactive links (to fix `activeClassName` error)

@@ -1,4 +1,5 @@
-import React, {useState,createContext,useContext} from "react";
+import React, { useState, createContext, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 //Auth context to manage user state
 const AuthContext = createContext();
@@ -15,11 +16,12 @@ export function AuthProvider({ children }) {
         localStorage.setItem('user', JSON.stringify(userData));
     };
 
-    // Todo: updateuser and Logout
+    // Todo: updateuser and Logout (done)
     const logout = () => {
-        setUser(null);
-        localStorage.removeItem('user');
-      };
+      setUser(null);
+      localStorage.removeItem('user');
+      navigate('/'); // Redirect to landing page
+    };
 
       const updateUser = (userData) => {
         setUser(userData);
