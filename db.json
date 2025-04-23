@@ -1,45 +1,50 @@
 {
-    "users": [
-      {
-        "id": 1,
-        "name": "Test User",
-        "email": "test@mail.com",
-        "password": "password123" 
-      }
-    ],
-    "flashcards": [
-      {
-        "id": 1,
-        "userId": 1,
-        "category": "Math",
-        "question": "What is 2 + 2?",
-        "answer": "4",
-        "difficulty": 1
-      }
-      
-    ],
-    "categories": [
-      { "id": 1, "userId": 1, "name": "Math" },
-      { "id": 2, "userId": 1, "name": "History" }
-    ],
-    "progress": [
-      {
-        "id": 1,
-        "userId": 1,
-        "flashcardId": 1,
-        "correct": true,
-        "timestamp": "2025-04-22T16:00:00Z"
-      }
-    ],
-
-    
-    "badges": [
-      {
-        "id": 1,
-        "userId": 1,
-        "name": "Quiz Master",
-        "description": "Answered 10 questions correctly",
-        "earned": false
-      }
-    ]
-  }
+  "users": [
+    {
+      "id": "1",
+      "name": "Test User",
+      "email": "test@mail.com",
+      "password": "password123"
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "1",
+      "userId": 1,
+      "category": "Math",
+      "question": "What is 2 + 2?",
+      "answer": "4",
+      "difficulty": 1
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "Math"
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "name": "History"
+    }
+  ],
+  "progress": [
+    {
+      "id": "1",
+      "userId": 1,
+      "flashcardId": 1,
+      "correct": true,
+      "timestamp": "2025-04-22T16:00:00Z"
+    }
+  ],
+  "badges": [
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "Quiz Master",
+      "description": "Answered 10 questions correctly",
+      "earned": false
+    }
+  ]
+}

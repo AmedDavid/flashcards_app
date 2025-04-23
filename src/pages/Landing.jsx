@@ -31,7 +31,7 @@ function Landing() {
           <h3 className="text-xl font-semibold mb-2 dark:text-gray-100">Create Flashcards</h3>
           <p className="text-gray-600 dark:text-gray-300">Easily create and organize flashcards for any subject.</p>
         </div>
-        //Gamification (stretch functionality)
+        {/* //Gamification (stretch functionality) */}
         <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
           <Award className="w-12 h-12 mx-auto mb-4 text-primary" />
           <h3 className="text-xl font-semibold mb-2 dark:text-gray-100">Track Progress</h3>
