@@ -18,14 +18,20 @@ function Flashcards() {
     // Fetch flashcards for the selected category and user
     const fetchFlashcards = async () => {
       try {
+        console.log('Fetching flashcards for category:', category, 'user:', user.id); // Debug log
         const data = await getFlashcards(user.id);
-        const filtered = data.filter((f) => f.category === category);
+        const filtered = data.filter((f) => f.category === decodeURIComponent(category));
+        console.log('Filtered flashcards:', filtered); // Debug log
         setFlashcards(filtered);
-      } catch {
+        if (filtered.length === 0) {
+          setError(`No flashcards found for category "${decodeURIComponent(category)}"`);
+        }
+      } catch (err) {
+        console.error('Error fetching flashcards:', err);
         setError('Failed to load flashcards');
       }
     };
-    if (user) fetchFlashcards();
+    if (user && category) fetchFlashcards();
   }, [category, user]);
 
   const handleNext = () => {
@@ -45,7 +51,7 @@ function Flashcards() {
     const fetchFlashcards = async () => {
       try {
         const data = await getFlashcards(user.id);
-        const filtered = data.filter((f) => f.category === category);
+        const filtered = data.filter((f) => f.category === decodeURIComponent(category));
         setFlashcards(filtered);
         if (currentIndex >= filtered.length) {
           setCurrentIndex(Math.max(0, filtered.length - 1));
@@ -59,7 +65,9 @@ function Flashcards() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6 dark:text-gray-100">{category} Flashcards</h1>
+      <h1 className="text-3xl font-bold mb-6 dark:text-gray-100">
+        {decodeURIComponent(category)} Flashcards
+      </h1>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       {flashcards.length > 0 ? (
         <>
@@ -71,9 +79,9 @@ function Flashcards() {
             isLast={currentIndex === flashcards.length - 1}
           />
           <button
-            onClick={() => navigate(`/quiz/${category}`)}
+            onClick={() => navigate(`/quiz/${encodeURIComponent(category)}`)}
             className="mt-4 bg-secondary text-white p-2 rounded hover:bg-emerald-600 transition"
-            aria-label={`Start quiz for ${category}`}
+            aria-label={`Start quiz for ${decodeURIComponent(category)}`}
           >
             Start Quiz
           </button>
@@ -88,3 +96,5 @@ function Flashcards() {
 }
 
 export default Flashcards;
+
+

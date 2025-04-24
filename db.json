@@ -227,6 +227,20 @@
       "flashcardId": 2,
       "correct": true,
       "timestamp": "2025-04-24T08:05:00Z"
+    },
+    {
+      "id": "aebb",
+      "flashcardId": 1,
+      "userId": "1",
+      "correct": true,
+      "timestamp": "2025-04-24T11:18:57.392Z"
+    },
+    {
+      "id": "a051",
+      "flashcardId": 2,
+      "userId": "1",
+      "correct": true,
+      "timestamp": "2025-04-24T11:19:00.647Z"
     }
   ],
   "badges": [

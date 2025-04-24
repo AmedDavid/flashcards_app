@@ -38,6 +38,12 @@ function CategorySelector({ onSelect }) {
     }
   };
 
+  // Ensure category is passed correctly to onSelect
+  const handleSelect = (category) => {
+    console.log('Selected category:', category); // Debug log
+    onSelect(category);
+  };
+
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold mb-2 dark:text-gray-100">Categories</h2>
@@ -46,7 +52,7 @@ function CategorySelector({ onSelect }) {
         {categories.map((category) => (
           <button
             key={category.id}
-            onClick={() => onSelect(category.name)}
+            onClick={() => handleSelect(category.name)}
             className="bg-secondary text-white p-4 rounded-lg hover:bg-emerald-600 transition"
             aria-label={`Select ${category.name} category`}
           >
@@ -76,3 +82,5 @@ function CategorySelector({ onSelect }) {
 }
 
 export default CategorySelector;
+
+
