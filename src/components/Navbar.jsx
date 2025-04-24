@@ -57,9 +57,6 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
               <NavLink to="/create" className={navLinkClass}>
                 Create
               </NavLink>
-              <NavLink to="/quiz" className={navLinkClass}>
-                Quiz
-              </NavLink>
               <NavLink to="/progress" className={navLinkClass}>
                 Progress
               </NavLink>

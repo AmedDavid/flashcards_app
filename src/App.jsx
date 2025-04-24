@@ -78,6 +78,14 @@ function App() {
               }
             />
             <Route
+              path="/quiz"
+              element={
+                <ProtectedRoute>
+                  <Navigate to="/home" state={{ error: 'Please select a category to start a quiz' }} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/create"
               element={
                 <ProtectedRoute>

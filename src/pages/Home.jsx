@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import CategorySelector from '../components/CategorySelector';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -6,14 +7,11 @@ import { useAuth } from '../context/AuthContext';
 function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const error = location.state?.error;
 
   // Handle category selection and navigate to Flashcards page
   const handleSelect = (category) => {
-    if (!category) {
-      console.error('No category provided for navigation');
-      return;
-    }
-    // template literal to navigate to the flashcards page for the selected category
     navigate(`/flashcards/${encodeURIComponent(category)}`);
   };
 
@@ -21,6 +19,8 @@ function Home() {
         <div>
             <h1 className="text-3xl font-bold mb-6 dark:text-gray-100">
                 Welcome {user.name} to FlashCards
+                {/* Pass the errors */}
+                {error && <p className="text-red-500 mb-4">{error}</p>}
                 <CategorySelector onSelect={handleSelect} />
             </h1>
         </div>

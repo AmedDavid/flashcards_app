@@ -18,10 +18,10 @@ function Flashcards() {
     // Fetch flashcards for the selected category and user
     const fetchFlashcards = async () => {
       try {
-        console.log('Fetching flashcards for category:', category, 'user:', user.id); // Debug log
+        // console.log('Fetching flashcards for category:', category, 'user:', user.id); // Debug log
         const data = await getFlashcards(user.id);
         const filtered = data.filter((f) => f.category === decodeURIComponent(category));
-        console.log('Filtered flashcards:', filtered); // Debug log
+        // console.log('Filtered flashcards:', filtered); // Debug log
         setFlashcards(filtered);
         if (filtered.length === 0) {
           setError(`No flashcards found for category "${decodeURIComponent(category)}"`);
