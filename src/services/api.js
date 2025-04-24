@@ -80,11 +80,64 @@ export const updateFlashcard = async (id, flashcard) => {
 };
 
 
-//categories
+// Categories get and create
+export const getCategories = async (userId) => {
+  if (await isOffline()) return cache.categories.filter((c) => c.userId === userId);
+  const response = await api.get(`/categories?userId=${userId}`);
+  updateCache('categories', response.data);
+  return response.data;
+};
 
-//progress
+export const createCategory = async (category) => {
+  if (await isOffline()) {
+    const newCategory = { ...category, id: Date.now() };
+    cache.categories.push(newCategory);
+    updateCache('categories', cache.categories);
+    return newCategory;
+  }
+  const response = await api.post('/categories', category);
+  updateCache('categories', [...cache.categories, response.data]);
+  return response.data;
+};
 
-//Badges
+// Progress
+export const getProgress = async (userId) => {
+  if (await isOffline()) return cache.progress.filter((p) => p.userId === userId);
+  const response = await api.get(`/progress?userId=${userId}`);
+  updateCache('progress', response.data);
+  return response.data;
+};
+
+export const saveProgress = async (progress) => {
+  if (await isOffline()) {
+    const newProgress = { ...progress, id: Date.now() };
+    cache.progress.push(newProgress);
+    updateCache('progress', cache.progress);
+    return newProgress;
+  }
+  const response = await api.post('/progress', progress);
+  updateCache('progress', [...cache.progress, response.data]);
+  return response.data;
+};
+
+// Badges (for stretch functionality)
+export const getBadges = async (userId) => {
+  if (await isOffline()) return cache.badges.filter((b) => b.userId === userId);
+  const response = await api.get(`/badges?userId=${userId}`);
+  updateCache('badges', response.data);
+  return response.data;
+};
+
+export const updateBadge = async (id, badge) => {
+  if (await isOffline()) {
+    cache.badges = cache.badges.map((b) => (b.id === id ? { ...b, ...badge } : b));
+    updateCache('badges', cache.badges);
+    return badge;
+  }
+  const response = await api.patch(`/badges/${id}`, badge);
+  updateCache('badges', cache.badges.map((b) => (b.id === id ? response.data : b)));
+  return response.data;
+};
 
 //users api create, update and get users
 export const getUsers = async () => {
