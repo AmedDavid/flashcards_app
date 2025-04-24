@@ -61,6 +61,38 @@ function App() {
               }
             />
             {/* other routes */}
+            <Route
+              path="/flashcards/:category"
+              element={
+                <ProtectedRoute>
+                  <Flashcards />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/quiz/:category"
+              element={
+                <ProtectedRoute>
+                  <Quiz />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create"
+              element={
+                <ProtectedRoute>
+                  <Create />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/progress"
+              element={
+                <ProtectedRoute>
+                  <Progress />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
       </div>
