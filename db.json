@@ -115,6 +115,22 @@
       "category": "Math",
       "userId": "1",
       "difficulty": 1
+    },
+    {
+      "id": "284b",
+      "question": "What is Science?",
+      "answer": "Science",
+      "category": "Science",
+      "userId": "1",
+      "difficulty": 1
+    },
+    {
+      "id": "6735",
+      "question": "What Is Botany?",
+      "answer": "Study if plants",
+      "category": "Science",
+      "userId": "1",
+      "difficulty": 1
     }
   ],
   "categories": [
@@ -157,6 +173,11 @@
       "id": 8,
       "userId": 3,
       "name": "Math"
+    },
+    {
+      "id": "0fe3",
+      "name": "Science",
+      "userId": "1"
     }
   ],
   "progress": [
@@ -257,6 +278,34 @@
       "userId": "1",
       "correct": true,
       "timestamp": "2025-04-24T11:19:00.647Z"
+    },
+    {
+      "id": "8f91",
+      "flashcardId": 3,
+      "userId": "1",
+      "correct": true,
+      "timestamp": "2025-04-24T13:25:10.288Z"
+    },
+    {
+      "id": "9de0",
+      "flashcardId": 4,
+      "userId": "1",
+      "correct": true,
+      "timestamp": "2025-04-24T13:25:17.238Z"
+    },
+    {
+      "id": "2beb",
+      "flashcardId": "284b",
+      "userId": "1",
+      "correct": true,
+      "timestamp": "2025-04-24T13:28:58.323Z"
+    },
+    {
+      "id": "2351",
+      "flashcardId": "6735",
+      "userId": "1",
+      "correct": false,
+      "timestamp": "2025-04-24T13:29:08.580Z"
     }
   ],
   "badges": [
@@ -265,7 +314,8 @@
       "userId": 1,
       "name": "Quiz Master",
       "description": "Answered 10 questions correctly",
-      "earned": true
+      "earned": true,
+      "target": 1
     },
     {
       "id": 2,
