@@ -1,11 +1,12 @@
 import CreateFlashcard from '../components/CreateFlashcard';
 
-// Page to create a new flashcard
+// Page to create a new flashcard with enhanced layout
 function Create() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6 dark:text-gray-100">Create a New Flashcard</h1>
-      <CreateFlashcard />
+    <div className="py-12 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      <div className="container mx-auto px-4">
+        <CreateFlashcard />
+      </div>
     </div>
   );
 }
