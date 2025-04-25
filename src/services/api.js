@@ -164,12 +164,46 @@ export const createUser = async (user) => {
 };
 
 export const updateUser = async (id, user) => {
-    if (await isOffline()) {
-      cache.users = cache.users.map((u) => (u.id === id ? { ...u, ...user } : u));
-      updateCache('users', cache.users);
-      return user;
-    }
-    const response = await api.patch(`/users/${id}`, user);
-    updateCache('users', cache.users.map((u) => (u.id === id ? response.data : u)));
-    return response.data;
-  };
+  if (await isOffline()) {
+    cache.users = cache.users.map((u) => (u.id === id ? { ...u, ...user, avatar: user.avatar || '' } : u));
+    updateCache('users', cache.users);
+    return { ...user, avatar: user.avatar || '' };
+  }
+  const response = await api.patch(`/users/${id}`, { ...user, avatar: user.avatar || '' });
+  updateCache('users', cache.users.map((u) => (u.id === id ? response.data : u)));
+  return response.data;
+};
+
+//delete user
+export const deleteUser = async (userId) => {
+  if (await isOffline()) {
+    cache.users = cache.users.filter((u) => u.id !== userId);
+    cache.flashcards = cache.flashcards.filter((f) => f.userId !== userId);
+    cache.progress = cache.progress.filter((p) => p.userId !== userId);
+    cache.badges = cache.badges.filter((b) => b.userId !== userId);
+    cache.categories = cache.categories.filter((c) => c.userId !== userId);
+    updateCache('users', cache.users);
+    updateCache('flashcards', cache.flashcards);
+    updateCache('progress', cache.progress);
+    updateCache('badges', cache.badges);
+    updateCache('categories', cache.categories);
+    return;
+  }
+  await Promise.all([
+    api.delete(`/users/${userId}`),
+    api.delete(`/flashcards?userId=${userId}`),
+    api.delete(`/progress?userId=${userId}`),
+    api.delete(`/badges?userId=${userId}`),
+    api.delete(`/categories?userId=${userId}`)
+  ]);
+  cache.users = cache.users.filter((u) => u.id !== userId);
+  cache.flashcards = cache.flashcards.filter((f) => f.userId !== userId);
+  cache.progress = cache.progress.filter((p) => p.userId !== userId);
+  cache.badges = cache.badges.filter((b) => b.userId !== userId);
+  cache.categories = cache.categories.filter((c) => c.userId !== userId);
+  updateCache('users', cache.users);
+  updateCache('flashcards', cache.flashcards);
+  updateCache('progress', cache.progress);
+  updateCache('badges', cache.badges);
+  updateCache('categories', cache.categories);
+};

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { updateUser as updateUserApi, getFlashcards, getProgress, getBadges } from '../services/api';
+import { updateUser as updateUserApi, getFlashcards, getProgress, getBadges, deleteUser } from '../services/api';
 import Button from './Button';
 import Card from './Card';
 import { User, Award, Trash2 } from 'lucide-react';
@@ -80,8 +80,7 @@ function Profile() {
     }
     setLoading(true);
     try {
-      // Note: Actual delete API not implemented; simulate deletion
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Mock API call
+      await deleteUser(user.id);
       logout();
     } catch {
       setError('Failed to delete account');
@@ -106,7 +105,7 @@ function Profile() {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 capitalize ${
               activeTab === tab
-                ? 'border-b-2 border-primary text-primary dark:text-indigo-300'
+                ? 'SPECIAL_CHARborder-b-2 border-primary text-primary dark:text-indigo-300'
                 : 'text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-indigo-300'
             }`}
             aria-label={`View ${tab} tab`}
