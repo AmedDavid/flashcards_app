@@ -10,7 +10,7 @@ import Create from './pages/Create';
 import Progress from './pages/Progress';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
-// import ProfilePage from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePage';
 
 // Protected route component for authenticated users
 function ProtectedRoute({ children }) {
@@ -61,11 +61,11 @@ function App() {
               }
             />
             {/* other routes */}
-            <Route
-              path="/flashcards/:category"
+             <Route
+              path="/profile"
               element={
                 <ProtectedRoute>
-                  <Flashcards />
+                  <ProfilePage />
                 </ProtectedRoute>
               }
             />
