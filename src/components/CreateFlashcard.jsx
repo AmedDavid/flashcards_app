@@ -2,19 +2,21 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCategories, createFlashcard } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import Button from './Button';
 
-// Form to create a new flashcard
-function CreateFlashcard() {
+// Form to create a new flashcard, with compact mode for home page
+function CreateFlashcard({ compact = false }) {
   const { user } = useAuth();
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch categories
   useEffect(() => {
-    // Fetch categories for the logged-in user
     const fetchCategories = async () => {
       try {
         const data = await getCategories(user.id);
@@ -27,27 +29,32 @@ function CreateFlashcard() {
     if (user) fetchCategories();
   }, [user]);
 
-
-
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!question.trim() || !answer.trim() || !category) {
       setError('All fields are required');
       return;
     }
-
+    setLoading(true);
     try {
       await createFlashcard({ question, answer, category, userId: user.id, difficulty: 1 });
-      navigate('/home');
+      setQuestion('');
+      setAnswer('');
+      setError('');
+      if (!compact) navigate('/home');
     } catch {
       setError('Failed to create flashcard');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4 dark:text-gray-100">Create Flashcard</h2>
-      {/* display form errors */}
+    <div className={compact ? 'max-w-2xl mx-auto' : 'max-w-md mx-auto'}>
+      {!compact && (
+        <h2 className="text-2xl font-bold mb-6 dark:text-gray-100">Create Flashcard</h2>
+      )}
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -56,8 +63,10 @@ function CreateFlashcard() {
             type="text"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            className="w-full p-2 border rounded dark:bg-gray-600 dark:text-gray-100"
+            placeholder="Enter your question"
+            className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-primary"
             aria-label="Flashcard question"
+            disabled={loading}
           />
         </div>
         <div>
@@ -66,8 +75,10 @@ function CreateFlashcard() {
             type="text"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            className="w-full p-2 border rounded dark:bg-gray-600 dark:text-gray-100"
+            placeholder="Enter the answer"
+            className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-primary"
             aria-label="Flashcard answer"
+            disabled={loading}
           />
         </div>
         <div>
@@ -75,23 +86,29 @@ function CreateFlashcard() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-2 border rounded dark:bg-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-primary"
             aria-label="Flashcard category"
+            disabled={loading}
           >
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.name}>
-                {cat.name}
-              </option>
-            ))}
+            {categories.length === 0 ? (
+              <option value="">No categories available</option>
+            ) : (
+              categories.map((cat) => (
+                <option key={cat.id} value={cat.name}>
+                  {cat.name}
+                </option>
+              ))
+            )}
           </select>
         </div>
-        <button
+        <Button
           type="submit"
-          className="w-full bg-primary text-white p-2 rounded hover:bg-indigo-700 transition"
-          aria-label="Create flashcard"
+          className="w-full bg-primary text-white hover:bg-indigo-700"
+          ariaLabel="Create flashcard"
+          disabled={loading}
         >
-          Create
-        </button>
+          {loading ? 'Creating...' : 'Create Flashcard'}
+        </Button>
       </form>
     </div>
   );
