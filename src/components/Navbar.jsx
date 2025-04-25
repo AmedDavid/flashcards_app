@@ -130,13 +130,6 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                     Create
                   </NavLink>
                   <NavLink
-                    to="/quiz"
-                    className={navLinkClass}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Quiz
-                  </NavLink>
-                  <NavLink
                     to="/progress"
                     className={navLinkClass}
                     onClick={() => setIsMenuOpen(false)}

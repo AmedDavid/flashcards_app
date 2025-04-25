@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { updateFlashcard, deleteFlashcard } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
-// List of flashcards with edit and delete options
+// List of flashcards with edit and delete options restricted to the creator
 function FlashcardList({ flashcards, onUpdate }) {
+  const { user } = useAuth();
   const [editingId, setEditingId] = useState(null);
   const [editQuestion, setEditQuestion] = useState('');
   const [editAnswer, setEditAnswer] = useState('');
   const [error, setError] = useState('');
-
 
   const handleEdit = (flashcard) => {
     setEditingId(flashcard.id);
@@ -25,8 +26,8 @@ function FlashcardList({ flashcards, onUpdate }) {
       onUpdate();
       setEditingId(null);
       setError('');
-    } catch {
-      setError('Failed to update flashcard');
+    } catch (err) {
+      setError(err.message || 'Failed to update flashcard');
     }
   };
 
@@ -34,11 +35,10 @@ function FlashcardList({ flashcards, onUpdate }) {
     try {
       await deleteFlashcard(id);
       onUpdate();
-    } catch {
-      setError('Failed to delete flashcard');
+    } catch (err) {
+      setError(err.message || 'Failed to delete flashcard');
     }
   };
-  
 
   return (
     <div>
@@ -85,22 +85,26 @@ function FlashcardList({ flashcards, onUpdate }) {
                   <p className="font-semibold dark:text-gray-100">{flashcard.question}</p>
                   <p className="text-gray-600 dark:text-gray-300">{flashcard.answer}</p>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(flashcard)}
-                    className="bg-accent text-white p-2 rounded hover:bg-amber-600 transition"
-                    aria-label={`Edit flashcard ${flashcard.question}`}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(flashcard.id)}
-                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition"
-                    aria-label={`Delete flashcard ${flashcard.question}`}
-                  >
-                    Delete
-                  </button>
-                </div>
+                {flashcard.userId === user.id ? (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(flashcard)}
+                      className="bg-accent text-white p-2 rounded hover:bg-amber-600 transition"
+                      aria-label={`Edit flashcard ${flashcard.question}`}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(flashcard.id)}
+                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition"
+                      aria-label={`Delete flashcard ${flashcard.question}`}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400 italic">Created by another user</p>
+                )}
               </div>
             )}
           </li>
