@@ -110,7 +110,7 @@ function ProgressChart() {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'sparkvibe_progress.csv';
+    a.download = 'flashcards_progress.csv';
     a.click();
     window.URL.revokeObjectURL(url);
   };
