@@ -1,61 +1,40 @@
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+//Auth context to manage user state
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+    const [user, setUser] = useState(() => {
+        //Load the users from local storage
+        const savedUser = localStorage.getItem('user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
 
-  // Initialize auth state from localStorage
-  useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-  }, []);
-
-  const login = (userData) => {
-    const authenticatedUser = {
-      ...userData,
-      isAuthenticated: true
+    const login = (userData) => {
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
     };
-    setUser(authenticatedUser);
-    localStorage.setItem('user', JSON.stringify(authenticatedUser));
-  };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
-    navigate('/');
-  };
+    // Todo: updateuser and Logout (done)
+    const logout = () => {
+      setUser(null);
+      localStorage.removeItem('user');
+      navigate('/'); // Redirect to landing page
+    };
 
-  const updateUser = (updatedData) => {
-    const updatedUser = { ...user, ...updatedData };
-    setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-  };
-
-  return (
-    <AuthContext.Provider 
-      value={{ 
-        user, 
-        currentUser: user, // Alias for compatibility
-        login, 
-        logout, 
-        updateUser,
-        isAuthenticated: !!user?.isAuthenticated // Explicit auth check
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-}
+      const updateUser = (userData) => {
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+      };
+    
+      return (
+        <AuthContext.Provider value={{ user, login, logout, updateUser }}>
+          {children}
+        </AuthContext.Provider>
+      );
+    }
+    
+    export function useAuth() {
+      return useContext(AuthContext);
+    }

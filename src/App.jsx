@@ -61,11 +61,11 @@ function App() {
               }
             />
             {/* other routes */}
-             <Route
-              path="/profile"
+            <Route
+              path="/flashcards/:category"
               element={
                 <ProtectedRoute>
-                  <ProfilePage />
+                  <Flashcards />
                 </ProtectedRoute>
               }
             />
@@ -98,6 +98,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Progress />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
                 </ProtectedRoute>
               }
             />
