@@ -61,16 +61,11 @@ function App() {
               }
             />
             {/* other routes */}
-            <Route
-
+             <Route
               path="/profile"
               element={
                 <ProtectedRoute>
                   <ProfilePage />
-              path="/flashcards/:category"
-              element={
-                <ProtectedRoute>
-                  <Flashcards />
                 </ProtectedRoute>
               }
             />
