@@ -5,6 +5,18 @@
       "name": "Test User",
       "email": "test@mail.com",
       "password": "password123"
+    },
+    {
+      "id": "6c34",
+      "name": "Test User",
+      "email": "test1@mail.com",
+      "password": "password123"
+    },
+    {
+      "id": "eb72",
+      "name": "hfj",
+      "email": "duncankariukimugo@gmail.com",
+      "password": "Iamduncan_01"
     }
   ],
   "flashcards": [
