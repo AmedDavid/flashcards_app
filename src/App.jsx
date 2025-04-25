@@ -4,10 +4,10 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Home from './pages/Home';
-// import Flashcards from './pages/Flashcards';
-// import Quiz from './pages/Quiz';
-// import Create from './pages/Create';
-// import Progress from './pages/Progress';
+import Flashcards from './pages/Flashcards';
+import Quiz from './pages/Quiz';
+import Create from './pages/Create';
+import Progress from './pages/Progress';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 // import ProfilePage from './pages/ProfilePage';
@@ -61,6 +61,46 @@ function App() {
               }
             />
             {/* other routes */}
+            <Route
+              path="/flashcards/:category"
+              element={
+                <ProtectedRoute>
+                  <Flashcards />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/quiz/:category"
+              element={
+                <ProtectedRoute>
+                  <Quiz />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/quiz"
+              element={
+                <ProtectedRoute>
+                  <Navigate to="/home" state={{ error: 'Please select a category to start a quiz' }} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create"
+              element={
+                <ProtectedRoute>
+                  <Create />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/progress"
+              element={
+                <ProtectedRoute>
+                  <Progress />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
       </div>
