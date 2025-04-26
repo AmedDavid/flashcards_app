@@ -145,7 +145,7 @@ function Profile() {
             <div className="flex items-center gap-4">
               <div className="relative">
                 <img
-                  src={avatar || 'https://via.placeholder.com/100'}
+                  src={avatar || 'https://placehold.co/100x100'}
                   alt="User avatar"
                   className="w-24 h-24 rounded-full object-cover"
                 />
