@@ -25,13 +25,13 @@ const updateCache = (key, data) => {
 
 // Check if offline by pinging the /users endpoint
 const isOffline = async () => {
-    try {
-      await axios.get('http://localhost:3001/users');
-      return false;
-    } catch {
-      return true;
-    }
-  };
+  try {
+    await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/users`);
+    return false;
+  } catch {
+    return true;
+  }
+};
 
 // Flashcards (get, create, update and delete)
 export const getFlashcards = async (userId) => {
