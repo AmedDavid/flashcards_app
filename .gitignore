@@ -14,8 +14,8 @@ dist-ssr
 .env
 .env.*
 
-# Keep backend/db.json for deployment
-!backend/db.json
+# Ensure db.json is included
+!db.json
 
 # Editor directories and files
 .vscode/*
