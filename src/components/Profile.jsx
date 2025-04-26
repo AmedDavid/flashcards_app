@@ -81,9 +81,12 @@ function Profile() {
     setLoading(true);
     try {
       await deleteUser(user.id);
-      logout();
-    } catch {
-      setError('Failed to delete account');
+      setSuccess('Account deleted successfully');
+      setTimeout(() => {
+        logout();
+      }, 1000); // Delay logout to show success message
+    } catch (err) {
+      setError(err.message || 'Failed to delete account. Please try again.');
     } finally {
       setLoading(false);
       setDeleteConfirm(false);
@@ -105,7 +108,7 @@ function Profile() {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 capitalize ${
               activeTab === tab
-                ? 'SPECIAL_CHARborder-b-2 border-primary text-primary dark:text-indigo-300'
+                ? 'border-b-2 border-primary text-primary dark:text-indigo-300'
                 : 'text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-indigo-300'
             }`}
             aria-label={`View ${tab} tab`}

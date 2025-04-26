@@ -141,26 +141,22 @@ export const updateBadge = async (id, badge) => {
 
 //users api create, update and get users
 export const getUsers = async () => {
-    if (await isOffline()) return cache.users;
-    const response = await api.get('/users');
-    updateCache('users', response.data);
-    return response.data;
-  };  
+  if (await isOffline()) return cache.users;
+  const response = await api.get('/users');
+  updateCache('users', response.data);
+  return response.data;
+};
 
 export const createUser = async (user) => {
-    if (await isOffline()) {
-        const newUser = { ...user, id: Date.now() };
-
-        //get data from cache
-        cache.user.push(newUser);
-        updateCache('users', cache.users);
-        return newUser;
-    }
-
-    //send the response
-    const response = await api.post('/users', user);
-    updateCache('users', [...cache.users, response.data]);
-    return response.data;
+  if (await isOffline()) {
+    const newUser = { ...user, id: Date.now(), avatar: user.avatar || '' };
+    cache.users.push(newUser); // Fixed typo: cache.user -> cache.users
+    updateCache('users', cache.users);
+    return newUser;
+  }
+  const response = await api.post('/users', { ...user, avatar: user.avatar || '' });
+  updateCache('users', [...cache.users, response.data]);
+  return response.data;
 };
 
 export const updateUser = async (id, user) => {
@@ -189,21 +185,38 @@ export const deleteUser = async (userId) => {
     updateCache('categories', cache.categories);
     return;
   }
-  await Promise.all([
-    api.delete(`/users/${userId}`),
-    api.delete(`/flashcards?userId=${userId}`),
-    api.delete(`/progress?userId=${userId}`),
-    api.delete(`/badges?userId=${userId}`),
-    api.delete(`/categories?userId=${userId}`)
-  ]);
-  cache.users = cache.users.filter((u) => u.id !== userId);
-  cache.flashcards = cache.flashcards.filter((f) => f.userId !== userId);
-  cache.progress = cache.progress.filter((p) => p.userId !== userId);
-  cache.badges = cache.badges.filter((b) => b.userId !== userId);
-  cache.categories = cache.categories.filter((c) => c.userId !== userId);
-  updateCache('users', cache.users);
-  updateCache('flashcards', cache.flashcards);
-  updateCache('progress', cache.progress);
-  updateCache('badges', cache.badges);
-  updateCache('categories', cache.categories);
+
+  try {
+    // Fetch all related resources
+    const [flashcards, progress, badges, categories] = await Promise.all([
+      api.get(`/flashcards?userId=${userId}`).then((res) => res.data),
+      api.get(`/progress?userId=${userId}`).then((res) => res.data),
+      api.get(`/badges?userId=${userId}`).then((res) => res.data),
+      api.get(`/categories?userId=${userId}`).then((res) => res.data),
+    ]);
+
+    // Delete each resource individually
+    await Promise.all([
+      ...flashcards.map((f) => api.delete(`/flashcards/${f.id}`)),
+      ...progress.map((p) => api.delete(`/progress/${p.id}`)),
+      ...badges.map((b) => api.delete(`/badges/${b.id}`)),
+      ...categories.map((c) => api.delete(`/categories/${c.id}`)),
+      api.delete(`/users/${userId}`), // Delete user last
+    ]);
+
+    // Update cache after successful deletion
+    cache.users = cache.users.filter((u) => u.id !== userId);
+    cache.flashcards = cache.flashcards.filter((f) => f.userId !== userId);
+    cache.progress = cache.progress.filter((p) => p.userId !== userId);
+    cache.badges = cache.badges.filter((b) => b.userId !== userId);
+    cache.categories = cache.categories.filter((c) => c.userId !== userId);
+    updateCache('users', cache.users);
+    updateCache('flashcards', cache.flashcards);
+    updateCache('progress', cache.progress);
+    updateCache('badges', cache.badges);
+    updateCache('categories', cache.categories);
+  } catch (error) {
+    console.error('Error deleting user data:', error.message, error.response?.data);
+    throw new Error('Failed to delete user account');
+  }
 };
