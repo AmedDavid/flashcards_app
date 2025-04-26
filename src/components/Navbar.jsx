@@ -3,24 +3,25 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Sun, Moon, LogOut, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import Button from './Button';
 
-// Navigation bar with dynamic links based on auth state
+// Navigation bar with enhanced animations and accessibility
 function Navbar({ isDarkMode, toggleDarkMode }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Handle logo click based on auth status
+  // Handle logo click
   const handleLogoClick = () => {
     navigate(user ? '/home' : '/');
+    setIsMenuOpen(false);
   };
 
   // Handle logout
   const handleLogout = () => {
-    // console.log('Logout clicked');
     logout();
     navigate('/');
-    setIsMenuOpen(false); // Close menu on logout
+    setIsMenuOpen(false);
   };
 
   // Toggle mobile menu
@@ -28,78 +29,79 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
     setIsMenuOpen((prev) => !prev);
   };
 
-    // Function to conditionally apply classes for active/inactive links (to fix `activeClassName` error)
-    const navLinkClass = ({ isActive }) =>
+  // NavLink styling
+  const navLinkClass = ({ isActive }) =>
+    `flex items-center gap-2 px-3 py-2 rounded-md transition-colors ${
       isActive
-        ? 'text-white font-semibold underline underline-offset-4'
-        : 'text-white hover:text-indigo-200 transition-colors';
+        ? 'bg-indigo-700 text-white font-semibold'
+        : 'text-white hover:bg-indigo-700 hover:text-white'
+    }`;
 
   return (
-    <nav className="bg-primary text-white p-4 shadow-md sticky top-0 z-50">
+    <nav className="bg-primary text-white p-4 shadow-lg sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo/Title */}
-        <button
+        {/* Logo */}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
           onClick={handleLogoClick}
-          className="text-2xl font-bold cursor-pointer hover:text-indigo-200 transition-colors"
+          className="text-2xl font-bold"
           aria-label="Go to home or landing page"
         >
-          FlashCards
-        </button>
+          FLashCards
+        </motion.button>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center gap-4">
           {user ? (
             <>
-            {/* Pass the Nav Links */}
-              <NavLink to="/home" className={navLinkClass}>
+              <NavLink to="/home" className={navLinkClass} aria-label="Home page">
                 Home
               </NavLink>
-              <NavLink to="/create" className={navLinkClass}>
+              <NavLink to="/create" className={navLinkClass} aria-label="Create flashcard">
                 Create
               </NavLink>
-              <NavLink to="/progress" className={navLinkClass}>
+              <NavLink to="/progress" className={navLinkClass} aria-label="Progress page">
                 Progress
               </NavLink>
-              <NavLink to="/profile" className={navLinkClass}>
+              <NavLink to="/profile" className={navLinkClass} aria-label="Profile page">
                 Profile
               </NavLink>
-              <button
+              <Button
                 onClick={handleLogout}
-                className="p-2 rounded-full hover:bg-indigo-700 transition-colors"
-                aria-label="Log out"
+                className="bg-transparent hover:bg-indigo-700"
+                ariaLabel="Log out"
               >
                 <LogOut size={20} />
-              </button>
+              </Button>
             </>
           ) : (
             <>
-            {/* // Sign-in/signup links */}
-              <NavLink to="/signin" className={navLinkClass}>
+              <NavLink to="/signin" className={navLinkClass} aria-label="Sign in">
                 Sign In
               </NavLink>
-              <NavLink to="/signup" className={navLinkClass}>
+              <NavLink to="/signup" className={navLinkClass} aria-label="Sign up">
                 Sign Up
               </NavLink>
             </>
           )}
-        <button
+          <Button
             onClick={toggleDarkMode}
-            className="p-2 rounded-full hover:bg-indigo-700"
-            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
+            className="bg-transparent hover:bg-indigo-700"
+            ariaLabel={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+          </Button>
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2 rounded-full hover:bg-indigo-700 transition-colors"
+        <Button
+          className="md:hidden bg-transparent hover:bg-indigo-700"
           onClick={toggleMenu}
-          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          ariaLabel={isMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isMenuOpen}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        </Button>
       </div>
 
       {/* Mobile Menu */}
@@ -112,7 +114,7 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
             transition={{ duration: 0.3 }}
             className="md:hidden bg-primary overflow-hidden"
           >
-            <div className="container mx-auto py-4 flex flex-col space-y-4">
+            <div className="container mx-auto py-4 flex flex-col gap-4">
               {user ? (
                 <>
                   <NavLink
@@ -143,14 +145,14 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                   >
                     Profile
                   </NavLink>
-                  <button
+                  <Button
                     onClick={handleLogout}
-                    className="flex items-center text-white hover:text-indigo-200 transition-colors"
-                    aria-label="Log out"
+                    className="flex items-center gap-2 text-white hover:bg-indigo-700"
+                    ariaLabel="Log out"
                   >
-                    <LogOut size={20} className="mr-2" />
+                    <LogOut size={20} />
                     Log Out
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -170,23 +172,14 @@ function Navbar({ isDarkMode, toggleDarkMode }) {
                   </NavLink>
                 </>
               )}
-              <button
+              <Button
                 onClick={toggleDarkMode}
-                className="flex items-center text-white hover:text-indigo-200 transition-colors"
-                aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="flex items-center gap-2 text-white hover:bg-indigo-700"
+                ariaLabel={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               >
-                {isDarkMode ? (
-                  <>
-                    <Sun size={20} className="mr-2" />
-                    Light Mode
-                  </>
-                ) : (
-                  <>
-                    <Moon size={20} className="mr-2" />
-                    Dark Mode
-                  </>
-                )}
-              </button>
+                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+              </Button>
             </div>
           </motion.div>
         )}

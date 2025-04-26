@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { updateFlashcard, deleteFlashcard } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import Button from './Button';
+import Card from './Card';
 
-// List of flashcards with edit and delete options restricted to the creator
+// List of flashcards with edit and delete options
 function FlashcardList({ flashcards, onUpdate }) {
   const { user } = useAuth();
   const [editingId, setEditingId] = useState(null);
@@ -26,8 +29,8 @@ function FlashcardList({ flashcards, onUpdate }) {
       onUpdate();
       setEditingId(null);
       setError('');
-    } catch (err) {
-      setError(err.message || 'Failed to update flashcard');
+    } catch {
+      setError('Failed to update flashcard');
     }
   };
 
@@ -35,82 +38,96 @@ function FlashcardList({ flashcards, onUpdate }) {
     try {
       await deleteFlashcard(id);
       onUpdate();
-    } catch (err) {
-      setError(err.message || 'Failed to delete flashcard');
+    } catch {
+      setError('Failed to delete flashcard');
     }
   };
 
   return (
-    <div>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <ul className="space-y-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      {error && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-red-500 mb-4"
+        >
+          {error}
+        </motion.p>
+      )}
+      <div className="space-y-4">
         {flashcards.map((flashcard) => (
-          <li key={flashcard.id} className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
+          <Card key={flashcard.id}>
             {editingId === flashcard.id ? (
-              <div className="flex flex-col gap-2">
+              <div className="space-y-4">
                 <input
                   type="text"
                   value={editQuestion}
                   onChange={(e) => setEditQuestion(e.target.value)}
-                  className="p-2 border rounded dark:bg-gray-600 dark:text-gray-100"
+                  className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-primary"
                   aria-label="Edit question"
                 />
                 <input
                   type="text"
                   value={editAnswer}
                   onChange={(e) => setEditAnswer(e.target.value)}
-                  className="p-2 border rounded dark:bg-gray-600 dark:text-gray-100"
+                  className="w-full p-3 border rounded-lg dark:bg-gray-700 dark:text-gray-100 focus:ring-2 focus:ring-primary"
                   aria-label="Edit answer"
                 />
-                <div className="flex gap-2">
-                  <button
+                <div className="flex gap-4">
+                  <Button
                     onClick={() => handleSave(flashcard.id)}
-                    className="bg-secondary text-white p-2 rounded hover:bg-emerald-600 transition"
-                    aria-label="Save changes"
+                    className="bg-secondary text-white hover:bg-emerald-600"
+                    ariaLabel="Save changes"
                   >
                     Save
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setEditingId(null)}
-                    className="bg-gray-300 text-gray-700 p-2 rounded hover:bg-gray-400 transition"
-                    aria-label="Cancel edit"
+                    className="bg-gray-300 text-gray-700 hover:bg-gray-400"
+                    ariaLabel="Cancel edit"
                   >
                     Cancel
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                   <p className="font-semibold dark:text-gray-100">{flashcard.question}</p>
                   <p className="text-gray-600 dark:text-gray-300">{flashcard.answer}</p>
                 </div>
                 {flashcard.userId === user.id ? (
-                  <div className="flex gap-2">
-                    <button
+                  <div className="flex gap-4">
+                    <Button
                       onClick={() => handleEdit(flashcard)}
-                      className="bg-accent text-white p-2 rounded hover:bg-amber-600 transition"
-                      aria-label={`Edit flashcard ${flashcard.question}`}
+                      className="bg-accent text-white hover:bg-amber-600"
+                      ariaLabel={`Edit flashcard ${flashcard.question}`}
                     >
                       Edit
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => handleDelete(flashcard.id)}
-                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition"
-                      aria-label={`Delete flashcard ${flashcard.question}`}
+                      className="bg-red-500 text-white hover:bg-red-600"
+                      ariaLabel={`Delete flashcard ${flashcard.question}`}
                     >
                       Delete
-                    </button>
+                    </Button>
                   </div>
                 ) : (
-                  <p className="text-gray-500 dark:text-gray-400 italic">Created by another user</p>
+                  <p className="text-gray-500 dark:text-gray-400 italic">
+                    Created by another user
+                  </p>
                 )}
               </div>
             )}
-          </li>
+          </Card>
         ))}
-      </ul>
-    </div>
+      </div>
+    </motion.div>
   );
 }
 

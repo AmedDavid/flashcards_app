@@ -1,48 +1,234 @@
 import { Link } from 'react-router-dom';
-import { BookOpen, Award, Users } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { BookOpen, Award, Users, Brain, Clock, Star } from 'lucide-react';
+import Card from '../components/Card';
+import Button from '../components/Button';
 
-// Landing page to introduce FlashCards
+// Landing page with professional design and animations
 function Landing() {
+  const featuresRef = useRef(null);
+  const whyUsRef = useRef(null);
+  const ctaRef = useRef(null);
+  const featuresInView = useInView(featuresRef, { once: true, margin: '-100px' });
+  const whyUsInView = useInView(whyUsRef, { once: true, margin: '-100px' });
+  const ctaInView = useInView(ctaRef, { once: true, margin: '-100px' });
+
+  // Animation variants for staggered card effects
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  // TODO: Add more sections and features to the landing page
+  // Add more features and sections as needed
+  // Add a footer with links to privacy policy, terms of service, etc.
+
   return (
-    <div className="text-center">
-      <h1 className="text-4xl font-bold mb-6 dark:text-gray-100">Welcome to FlashCards</h1>
-      <p className="text-lg mb-8 max-w-2xl mx-auto dark:text-gray-200">
-        Master your studies with interactive flashcards, quizzes, and progress tracking. Join thousands of learners and spark your knowledge today!
-      </p>
-      <div className="flex justify-center gap-4 mb-12">
-        <Link
-          to="/signup"
-          className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
-          aria-label="Get started"
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Hero Section */}
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="py-20 bg-gradient-to-r from-primary to-secondary text-white"
+        role="banner"
+      >
+        <div className="container mx-auto px-4 text-center">
+          <motion.h1
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-4xl md:text-6xl font-bold mb-6"
+          >
+            Spark Your Learning with FlashCards
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-lg md:text-xl mb-8 max-w-2xl mx-auto"
+          >
+            Create custom flashcards, track your progress, and master any subject with our intuitive study app. Perfect for students, professionals, and lifelong learners.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex justify-center gap-4"
+          >
+            <Button
+              as={Link}
+              to="/signup"
+              className="bg-white text-primary px-6 py-3 text-lg font-semibold hover:bg-gray-100"
+              ariaLabel="Get started with FlashCards"
+            >
+              Get Started
+            </Button>
+            <Button
+              as={Link}
+              to="/signin"
+              className="bg-transparent border-2 border-white text-white px-6 py-3 text-lg font-semibold hover:bg-white hover:text-primary"
+              ariaLabel="Sign in to FlashCards"
+            >
+              Sign In
+            </Button>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* Features Section */}
+      <section
+        ref={featuresRef}
+        className="container mx-auto px-4 py-16"
+        role="region"
+        aria-label="App features"
+      >
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={featuresInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-gray-100"
         >
-          Get Started
-        </Link>
-        <Link
-          to="/signin"
-          className="bg-secondary text-white px-6 py-3 rounded-lg hover:bg-emerald-600 transition"
-          aria-label="Sign in"
+          Everything You Need to Study Smarter
+        </motion.h2>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={featuresInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          Sign In
-        </Link>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-          <BookOpen className="w-12 h-12 mx-auto mb-4 text-primary" />
-          <h3 className="text-xl font-semibold mb-2 dark:text-gray-100">Create Flashcards</h3>
-          <p className="text-gray-600 dark:text-gray-300">Easily create and organize flashcards for any subject.</p>
+          <motion.div variants={cardVariants}>
+            <Card className="space-y-4" ariaLabel="Create Flashcards feature">
+              <BookOpen className="w-12 h-12 mx-auto text-primary" />
+              <h3 className="text-xl font-semibold dark:text-gray-100">Create Flashcards</h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Build and organize flashcards for any subject, from biology to history, in just a few clicks.
+              </p>
+            </Card>
+          </motion.div>
+          <motion.div variants={cardVariants}>
+            <Card className="space-y-4" ariaLabel="Track Progress feature">
+              <Award className="w-12 h-12 mx-auto text-primary" />
+              <h3 className="text-xl font-semibold dark:text-gray-100">Track Progress</h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Stay motivated with detailed stats, badges, and insights into your learning journey.
+              </p>
+            </Card>
+          </motion.div>
+          <motion.div variants={cardVariants}>
+            <Card className="space-y-4" ariaLabel="Learn Smarter feature">
+              <Users className="w-12 h-12 mx-auto text-primary" />
+              <h3 className="text-xl font-semibold dark:text-gray-100">Learn Smarter</h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Master tough concepts with spaced repetition and personalized study plans.
+              </p>
+            </Card>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section
+        ref={whyUsRef}
+        className="py-16 bg-gray-100 dark:bg-gray-800"
+        role="region"
+        aria-label="Why choose FlashCards"
+      >
+        <div className="container mx-auto px-4">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={whyUsInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-gray-100"
+          >
+            Why FlashCards Stands Out
+          </motion.h2>
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate={whyUsInView ? "visible" : "hidden"}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            <motion.div variants={cardVariants}>
+              <Card className="space-y-4 bg-white dark:bg-gray-700" ariaLabel="Personalized Learning feature">
+                <Brain className="w-12 h-12 mx-auto text-secondary" />
+                <h3 className="text-xl font-semibold dark:text-gray-100">Personalized Learning</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Our app adapts to your pace, focusing on areas where you need the most practice.
+                </p>
+              </Card>
+            </motion.div>
+            <motion.div variants={cardVariants}>
+              <Card className="space-y-4 bg-white dark:bg-gray-700" ariaLabel="Study Anywhere feature">
+                <Clock className="w-12 h-12 mx-auto text-secondary" />
+                <h3 className="text-xl font-semibold dark:text-gray-100">Study Anywhere</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Access your flashcards offline and sync your progress when you’re back online.
+                </p>
+              </Card>
+            </motion.div>
+            <motion.div variants={cardVariants}>
+              <Card className="space-y-4 bg-white dark:bg-gray-700" ariaLabel="Gamified Experience feature">
+                <Star className="w-12 h-12 mx-auto text-secondary" />
+                <h3 className="text-xl font-semibold dark:text-gray-100">Gamified Experience</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Earn badges and compete with yourself to make learning fun and rewarding.
+                </p>
+              </Card>
+            </motion.div>
+          </motion.div>
         </div>
-        {/* //Gamification (stretch functionality) */}
-        <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-          <Award className="w-12 h-12 mx-auto mb-4 text-primary" />
-          <h3 className="text-xl font-semibold mb-2 dark:text-gray-100">Track Progress</h3>
-          <p className="text-gray-600 dark:text-gray-300">Monitor your learning with detailed stats and badges.</p>
-        </div>
-        <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow">
-          <Users className="w-12 h-12 mx-auto mb-4 text-primary" />
-          <h3 className="text-xl font-semibold mb-2 dark:text-gray-100">Learn Smarter</h3>
-          <p className="text-gray-600 dark:text-gray-300">Use spaced repetition to master tough concepts.</p>
-        </div>
-      </div>
+      </section>
+
+      {/* CTA Section */}
+      <section
+        ref={ctaRef}
+        className="py-16 text-center"
+        role="region"
+        aria-label="Call to action"
+      >
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="text-3xl md:text-4xl font-bold mb-6 dark:text-gray-100"
+        >
+          Ready to Transform Your Learning?
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={ctaInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-lg mb-8 max-w-xl mx-auto dark:text-gray-200"
+        >
+          Join thousands of learners who are mastering their subjects with FlashCards. Sign up today and start your journey!
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={ctaInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <Button
+            as={Link}
+            to="/signup"
+            className="bg-primary text-white px-8 py-4 text-lg font-semibold hover:bg-indigo-700"
+            ariaLabel="Start learning with FlashCards"
+          >
+            Start Learning Now
+          </Button>
+        </motion.div>
+      </section>
     </div>
   );
 }
