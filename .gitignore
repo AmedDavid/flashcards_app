@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+
+# Keep backend/db.json for deployment
+!backend/db.json
 
 # Editor directories and files
 .vscode/*

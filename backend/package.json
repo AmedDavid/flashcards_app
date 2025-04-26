@@ -1,0 +1,10 @@
+{
+    "name": "flashcards-backend",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "json-server --watch db.json --port ${PORT:-3001}"
+    },
+    "dependencies": {
+      "json-server": "^1.0.0-beta.3"
+    }
+  }
