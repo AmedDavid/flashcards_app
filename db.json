@@ -11,6 +11,13 @@
       "name": "Bob Johnson",
       "email": "bob@example.com",
       "password": "bobpass"
+    },
+    {
+      "id": "1745635042703",
+      "name": "Test User",
+      "email": "test@mail.com",
+      "password": "#Mchafuziarts189",
+      "avatar": ""
     }
   ],
   "flashcards": [
@@ -53,6 +60,14 @@
       "question": "Which river is the longest in the world?",
       "answer": "Nile",
       "difficulty": 3
+    },
+    {
+      "id": "cd80",
+      "question": "What is 1 + 1?",
+      "answer": "3",
+      "category": "History",
+      "userId": "1745635042703",
+      "difficulty": 1
     }
   ],
   "categories": [
@@ -75,6 +90,11 @@
       "id": "8",
       "userId": 3,
       "name": "Math"
+    },
+    {
+      "id": "5e15",
+      "name": "History",
+      "userId": "1745635042703"
     }
   ],
   "progress": [
@@ -112,6 +132,30 @@
       "flashcardId": 10,
       "correct": false,
       "timestamp": "2025-04-23T11:05:00Z"
+    },
+    {
+      "id": "c208",
+      "flashcardId": "cd80",
+      "userId": "1745635042703",
+      "correct": false,
+      "category": "History",
+      "timestamp": "2025-04-26T02:39:30.785Z"
+    },
+    {
+      "id": "cbcc",
+      "flashcardId": "cd80",
+      "userId": "1745635042703",
+      "correct": true,
+      "category": "History",
+      "timestamp": "2025-04-26T02:40:25.098Z"
+    },
+    {
+      "id": "a119",
+      "flashcardId": "cd80",
+      "userId": "1745635042703",
+      "correct": false,
+      "category": "History",
+      "timestamp": "2025-04-26T02:47:35.656Z"
     }
   ],
   "badges": [
