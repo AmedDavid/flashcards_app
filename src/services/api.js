@@ -141,20 +141,26 @@ export const updateBadge = async (id, badge) => {
 
 //users api create, update and get users
 export const getUsers = async () => {
-  if (await isOffline()) return cache.users;
+  if (await isOffline()) {
+    // console.log('getUsers: Returning cached users', cache.users);
+    return cache.users;
+  }
   const response = await api.get('/users');
+  // console.log('getUsers: Fetched users from API', response.data);
   updateCache('users', response.data);
   return response.data;
 };
 
 export const createUser = async (user) => {
   if (await isOffline()) {
-    const newUser = { ...user, id: Date.now(), avatar: user.avatar || '' };
-    cache.users.push(newUser); // Fixed typo: cache.user -> cache.users
+    const newUser = { ...user, id: String(user.id || Date.now()), avatar: user.avatar || '' };
+    // console.log('createUser: Adding to cache', newUser);
+    cache.users.push(newUser);
     updateCache('users', cache.users);
     return newUser;
   }
-  const response = await api.post('/users', { ...user, avatar: user.avatar || '' });
+  const response = await api.post('/users', { ...user, id: String(user.id), avatar: user.avatar || '' });
+  // console.log('createUser: Added to API', response.data);
   updateCache('users', [...cache.users, response.data]);
   return response.data;
 };
