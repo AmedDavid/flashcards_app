@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { BookOpen, Award, Users, Brain, Clock, Star } from 'lucide-react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 
-// Landing page with professional design and animations
+// Landing page with professional design, animations, and SEO
 function Landing() {
   const featuresRef = useRef(null);
   const whyUsRef = useRef(null);
@@ -30,12 +31,49 @@ function Landing() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
-  // TODO: Add more sections and features to the landing page
-  // Add more features and sections as needed
-  // Add a footer with links to privacy policy, terms of service, etc.
+  // Structured Data for SEO
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Flashcards',
+    url: 'https://flashcards-app-steel.vercel.app',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: 'https://flashcards-app-steel.vercel.app/search?q={search_term_string}',
+      'query-input': 'required name=search_term_string',
+    },
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Helmet>
+        <title>Flashcards - Learn Smarter</title>
+        <meta
+          name="description"
+          content="Create, study, and master custom flashcards with Flashcards. Perfect for students, professionals, and lifelong learners."
+        />
+        <meta
+          name="keywords"
+          content="flashcards, study app, learning, education, spaced repetition, quiz"
+        />
+        <link rel="canonical" href="https://flashcards-app-steel.vercel.app/" />
+        <meta property="og:title" content="Flashcards - Learn Smarter" />
+        <meta
+          property="og:description"
+          content="Master any subject with custom flashcards, quizzes, and progress tracking."
+        />
+        <meta property="og:url" content="https://flashcards-app-steel.vercel.app/" />
+        <meta property="og:image" content="/assets/logo.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Flashcards - Learn Smarter" />
+        <meta
+          name="twitter:description"
+          content="Master any subject with custom flashcards, quizzes, and progress tracking."
+        />
+        <meta name="twitter:image" content="/assets/logo.svg" />
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+      </Helmet>
+
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 50 }}
@@ -51,7 +89,7 @@ function Landing() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-4xl md:text-6xl font-bold mb-6"
           >
-            Spark Your Learning with FlashCards
+            Spark Your Learning with Flashcards
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -71,7 +109,7 @@ function Landing() {
               as={Link}
               to="/signup"
               className="bg-white text-primary px-6 py-3 text-lg font-semibold hover:bg-gray-100"
-              ariaLabel="Get started with FlashCards"
+              ariaLabel="Get started with Flashcards"
             >
               Get Started
             </Button>
@@ -79,7 +117,7 @@ function Landing() {
               as={Link}
               to="/signin"
               className="bg-transparent border-2 border-white text-white px-6 py-3 text-lg font-semibold hover:bg-white hover:text-primary"
-              ariaLabel="Sign in to FlashCards"
+              ariaLabel="Sign in to Flashcards"
             >
               Sign In
             </Button>
@@ -143,7 +181,7 @@ function Landing() {
         ref={whyUsRef}
         className="py-16 bg-gray-100 dark:bg-gray-800"
         role="region"
-        aria-label="Why choose FlashCards"
+        aria-label="Why choose Flashcards"
       >
         <div className="container mx-auto px-4">
           <motion.h2
@@ -152,7 +190,7 @@ function Landing() {
             transition={{ duration: 0.5 }}
             className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-gray-100"
           >
-            Why FlashCards Stands Out
+            Why Flashcards Stands Out
           </motion.h2>
           <motion.div
             variants={containerVariants}
@@ -212,7 +250,7 @@ function Landing() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-lg mb-8 max-w-xl mx-auto dark:text-gray-200"
         >
-          Join thousands of learners who are mastering their subjects with FlashCards. Sign up today and start your journey!
+          Join thousands of learners who are mastering their subjects with Flashcards. Sign up today and start your journey!
         </motion.p>
         <motion.div
           initial={{ opacity: 0 }}
@@ -223,7 +261,7 @@ function Landing() {
             as={Link}
             to="/signup"
             className="bg-primary text-white px-8 py-4 text-lg font-semibold hover:bg-indigo-700"
-            ariaLabel="Start learning with FlashCards"
+            ariaLabel="Start learning with Flashcards"
           >
             Start Learning Now
           </Button>
@@ -232,7 +270,5 @@ function Landing() {
     </div>
   );
 }
-
-
 
 export default Landing;

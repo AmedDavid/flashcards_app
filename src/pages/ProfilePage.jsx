@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import Profile from '../components/Profile';
 
 // Profile page with enhanced layout
@@ -11,6 +12,11 @@ function ProfilePage() {
         transition={{ duration: 0.5 }}
         className="container mx-auto px-4"
       >
+        <Helmet>
+          <title>Your Profile - Flashcards</title>
+          <meta name="description" content="Manage your account and preferences on Flashcards." />
+          <link rel="canonical" href="https://flashcards-app-steel.vercel.app/profile" />
+        </Helmet>
         <h1 className="text-4xl font-bold mb-8 dark:text-gray-100 text-center">
           Your FlashCards Profile
         </h1>

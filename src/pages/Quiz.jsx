@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import QuizMode from '../components/QuizMode';
 import { getFlashcards } from '../services/api';
@@ -45,6 +46,11 @@ function Quiz() {
       transition={{ duration: 0.5 }}
       className="py-12 bg-gray-50 dark:bg-gray-900 min-h-screen"
     >
+      <Helmet>
+        <title>{category} Quiz - Flashcards</title>
+        <meta name="description" content="Test your knowledge with a {category} quiz on Flashcards." />
+        <link rel="canonical" href="https://flashcards-app-steel.vercel.app/quiz/{category}" />
+      </Helmet>
       <div className="container mx-auto px-4">
         <div className="bg-gradient-to-r from-primary to-secondary text-white p-6 rounded-xl mb-8 text-center">
           <h1 className="text-3xl md:text-4xl font-bold">

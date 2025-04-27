@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import CategorySelector from '../components/CategorySelector';
@@ -49,6 +50,11 @@ function Home() {
         transition={{ duration: 0.8 }}
         className="py-16 bg-gradient-to-r from-primary to-secondary text-white"
       >
+      <Helmet>
+        <title>Your Study Dashboard - Flashcards</title>
+        <meta name="description" content="Manage your categories and flashcards with Flashcards's intuitive dashboard." />
+        <link rel="canonical" href="https://flashcards-app-steel.vercel.app/home" />
+      </Helmet>
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Welcome, {user.name}, to Flashcards

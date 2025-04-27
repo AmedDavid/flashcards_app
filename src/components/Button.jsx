@@ -4,7 +4,8 @@ import { forwardRef } from 'react';
 // Reusable button component with polymorphic rendering and animations
 const Button = forwardRef(
   ({ children, as: Component = 'button', onClick, className, ariaLabel, type = 'button', disabled = false, ...props }, ref) => {
-    const MotionComponent = motion(Component);
+    // Create motion component using motion.create()
+    const MotionComponent = motion.create(Component);
 
     // TODO: handle polymorphic rendering for other components like 'a', 'div', etc.
 

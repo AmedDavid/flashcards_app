@@ -34,7 +34,7 @@ flashcards/
 │   └── favicon.ico
 ├── src/
 │   ├── assets/
-│   │   └── logo.png
+│   │   └── logo.svg
 │   ├── components/
 │   │   ├── Navbar.jsx (done)
 │   │   ├── Flashcard.jsx

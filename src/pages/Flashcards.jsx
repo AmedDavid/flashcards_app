@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import Flashcard from '../components/Flashcard';
 import FlashcardList from '../components/FlashcardList';
@@ -102,6 +103,15 @@ function Flashcards() {
       transition={{ duration: 0.5 }}
       className="py-12 bg-gray-50 dark:bg-gray-900 min-h-screen"
     >
+      <Helmet>
+        <title>{`${decodeURIComponent(category)} Flashcards`}</title>
+        <meta
+          name="description"
+          content={`Study and manage ${decodeURIComponent(category)} flashcards with Flashcards. Track progress and master your subject.`}
+        />
+        <meta name="keywords" content={`${decodeURIComponent(category)}, flashcards, study, learning`} />
+        <link rel="canonical" href={`https://flashcards-app-steel.vercel.app/${encodeURIComponent(category)}`} />
+      </Helmet>
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8 dark:text-gray-100 text-center">
           {decodeURIComponent(category)} Flashcards

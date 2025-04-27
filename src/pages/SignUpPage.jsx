@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import SignUp from '../components/SignUp';
+import { Helmet } from 'react-helmet-async';
 
 // Sign-up page with hero section
 function SignUpPage() {
@@ -11,6 +12,10 @@ function SignUpPage() {
         transition={{ duration: 0.8 }}
         className="py-16 bg-gradient-to-r from-primary to-secondary text-white"
       >
+        <Helmet><title>Sign Up - Flashcards</title>
+          <meta name="description" content="Join Flashcards to create and study custom flashcards." />
+          <link rel="canonical" href="https://flashcards-app-steel.vercel.app/signup" />
+        </Helmet>
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Join FlashCards Today</h1>
           <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
