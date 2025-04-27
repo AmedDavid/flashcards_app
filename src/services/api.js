@@ -80,7 +80,7 @@ export const updateFlashcard = async (id, flashcard) => {
 };
 
 
-// Categories get and create
+// Categories get, create, update and delete (The most complex part)
 export const getCategories = async (userId) => {
   if (await isOffline()) return cache.categories.filter((c) => c.userId === userId);
   const response = await api.get(`/categories?userId=${userId}`);
@@ -98,6 +98,106 @@ export const createCategory = async (category) => {
   const response = await api.post('/categories', category);
   updateCache('categories', [...cache.categories, response.data]);
   return response.data;
+};
+
+export const updateCategory = async (id, categoryName, userId) => {
+  if (await isOffline()) {
+    // Update category in cache
+    cache.categories = cache.categories.map((c) =>
+      c.id === id ? { ...c, name: categoryName } : c
+    );
+    // Update category name in flashcards
+    cache.flashcards = cache.flashcards.map((f) =>
+      f.userId === userId && f.category === cache.categories.find((c) => c.id === id).name
+        ? { ...f, category: categoryName }
+        : f
+    );
+    // Update category name in progress
+    cache.progress = cache.progress.map((p) =>
+      p.userId === userId && p.category === cache.categories.find((c) => c.id === id).name
+        ? { ...p, category: categoryName }
+        : p
+    );
+    updateCache('categories', cache.categories);
+    updateCache('flashcards', cache.flashcards);
+    updateCache('progress', cache.progress);
+    return { id, name: categoryName, userId };
+  }
+  // Update category
+  const response = await api.patch(`/categories/${id}`, { name: categoryName });
+  // Update flashcards with new category name
+  const flashcards = await api.get(`/flashcards?userId=${userId}&category=${encodeURIComponent(cache.categories.find((c) => c.id === id).name)}`);
+  await Promise.all(
+    flashcards.data.map((f) =>
+      api.patch(`/flashcards/${f.id}`, { ...f, category: categoryName })
+    )
+  );
+  // Update progress with new category name
+  const progress = await api.get(`/progress?userId=${userId}&category=${encodeURIComponent(cache.categories.find((c) => c.id === id).name)}`);
+  await Promise.all(
+    progress.data.map((p) =>
+      api.patch(`/progress/${p.id}`, { ...p, category: categoryName })
+    )
+  );
+  updateCache('categories', cache.categories.map((c) => (c.id === id ? response.data : c)));
+  updateCache('flashcards', cache.flashcards.map((f) =>
+    f.userId === userId && f.category === cache.categories.find((c) => c.id === id).name
+      ? { ...f, category: categoryName }
+      : f
+  ));
+  updateCache('progress', cache.progress.map((p) =>
+    p.userId === userId && p.category === cache.categories.find((c) => c.id === id).name
+      ? { ...p, category: categoryName }
+      : p
+  ));
+  return response.data;
+};
+
+export const deleteCategory = async (id, userId) => {
+  if (await isOffline()) {
+    const categoryName = cache.categories.find((c) => c.id === id)?.name;
+    // Delete category
+    cache.categories = cache.categories.filter((c) => c.id !== id);
+    // Delete associated flashcards
+    cache.flashcards = cache.flashcards.filter((f) => !(f.userId === userId && f.category === categoryName));
+    // Delete associated progress
+    cache.progress = cache.progress.filter((p) => !(p.userId === userId && p.category === categoryName));
+    // Delete associated badges
+    cache.badges = cache.badges.filter((b) => !(b.userId === userId && b.name.toLowerCase().includes(categoryName.toLowerCase())));
+    updateCache('categories', cache.categories);
+    updateCache('flashcards', cache.flashcards);
+    updateCache('progress', cache.progress);
+    updateCache('badges', cache.badges);
+    return;
+  }
+  try {
+    const categoryName = cache.categories.find((c) => c.id === id)?.name;
+    // Fetch associated resources
+    const [flashcards, progress, badges] = await Promise.all([
+      api.get(`/flashcards?userId=${userId}&category=${encodeURIComponent(categoryName)}`).then((res) => res.data),
+      api.get(`/progress?userId=${userId}&category=${encodeURIComponent(categoryName)}`).then((res) => res.data),
+      api.get(`/badges?userId=${userId}`).then((res) => res.data.filter((b) => b.name.toLowerCase().includes(categoryName.toLowerCase()))),
+    ]);
+    // Delete resources
+    await Promise.all([
+      ...flashcards.map((f) => api.delete(`/flashcards/${f.id}`)),
+      ...progress.map((p) => api.delete(`/progress/${p.id}`)),
+      ...badges.map((b) => api.delete(`/badges/${b.id}`)),
+      api.delete(`/categories/${id}`),
+    ]);
+    // Update cache
+    cache.categories = cache.categories.filter((c) => c.id !== id);
+    cache.flashcards = cache.flashcards.filter((f) => !(f.userId === userId && f.category === categoryName));
+    cache.progress = cache.progress.filter((p) => !(p.userId === userId && p.category === categoryName));
+    cache.badges = cache.badges.filter((b) => !(b.userId === userId && b.name.toLowerCase().includes(categoryName.toLowerCase())));
+    updateCache('categories', cache.categories);
+    updateCache('flashcards', cache.flashcards);
+    updateCache('progress', cache.progress);
+    updateCache('badges', cache.badges);
+  } catch (error) {
+    console.error('Error deleting category data:', error.message, error.response?.data);
+    throw new Error('Failed to delete category');
+  }
 };
 
 // Progress
