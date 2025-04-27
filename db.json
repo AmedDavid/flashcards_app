@@ -53,14 +53,6 @@
       "question": "Which river is the longest in the world?",
       "answer": "Nile",
       "difficulty": 3
-    },
-    {
-      "id": "7e5e",
-      "question": "test",
-      "answer": "test",
-      "category": "Science",
-      "userId": "2",
-      "difficulty": 1
     }
   ],
   "categories": [
